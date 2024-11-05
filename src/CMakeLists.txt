@@ -16,6 +16,7 @@ qt_add_library(QGC STATIC
     QGCConfig.h
     QGCToolbox.cc
     QGCToolbox.h
+    UI/preferences/PassAdvancedMode.qml
 )
 
 if(QGC_UTM_ADAPTER)

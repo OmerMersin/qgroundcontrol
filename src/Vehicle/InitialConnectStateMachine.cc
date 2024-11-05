@@ -26,7 +26,7 @@ InitialConnectStateMachine::InitialConnectStateMachine(Vehicle* vehicle)
     : _vehicle(vehicle)
 {
     static_assert(sizeof(_rgStates)/sizeof(_rgStates[0]) == sizeof(_rgProgressWeights)/sizeof(_rgProgressWeights[0]),
-            "array size mismatch");
+                  "array size mismatch");
 
     _progressWeightTotal = 0;
     for (int i = 0; i < _cStates; ++i) {
@@ -150,7 +150,7 @@ void InitialConnectStateMachine::_autopilotVersionRequestMessageHandler(void* re
 
         vehicle->_setCapabilities(autopilotVersion.capabilities);
     }
-        break;
+    break;
     case Vehicle::RequestMessageFailureCommandError:
         qCDebug(InitialConnectStateMachineLog) << QStringLiteral("REQUEST_MESSAGE:AUTOPILOT_VERSION command error(%1)").arg(commandResult);
         break;
@@ -224,7 +224,7 @@ void InitialConnectStateMachine::_protocolVersionRequestMessageHandler(void* res
         vehicle->_mavlinkProtocolRequestComplete = true;
         vehicle->_setMaxProtoVersionFromBothSources();
     }
-        break;
+    break;
     case Vehicle::RequestMessageFailureCommandError:
         qCDebug(InitialConnectStateMachineLog) << QStringLiteral("REQUEST_MESSAGE PROTOCOL_VERSION command error(%1)").arg(commandResult);
         break;
@@ -283,7 +283,7 @@ void InitialConnectStateMachine::_stateRequestCompInfoComplete(void* requestAllC
 {
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(requestAllCompleteFnData);
     disconnect(connectMachine->_vehicle->_componentInformationManager, &ComponentInformationManager::progressUpdate,
-            connectMachine, &InitialConnectStateMachine::gotProgressUpdate);
+               connectMachine, &InitialConnectStateMachine::gotProgressUpdate);
 
     connectMachine->advance();
 }
@@ -306,7 +306,7 @@ void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
     disconnect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
-            &InitialConnectStateMachine::gotProgressUpdate);
+               &InitialConnectStateMachine::gotProgressUpdate);
 
     if (!sharedLink) {
         qCDebug(InitialConnectStateMachineLog) << "_stateRequestMission: Skipping first mission load request due to no primary link";
@@ -395,4 +395,3 @@ void InitialConnectStateMachine::_stateSignalInitialConnectComplete(StateMachine
     qCDebug(InitialConnectStateMachineLog) << "Signalling initialConnectComplete";
     emit vehicle->initialConnectComplete();
 }
-

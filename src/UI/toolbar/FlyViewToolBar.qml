@@ -27,7 +27,7 @@ Rectangle {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
-    property color  _mainStatusBGColor: qgcPal.brandingPurple
+    property color  _mainStatusBGColor: qgcPal.brandingGreen
 
     function dropMessageIndicatorTool() {
         toolIndicators.dropMessageIndicatorTool();
@@ -66,7 +66,7 @@ Rectangle {
         QGCToolBarButton {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
+            icon.source:            "/res/DronetoolsLogoFull"
             logo:                   true
             onClicked:              mainWindow.showToolSelectDialog()
         }
@@ -75,17 +75,17 @@ Rectangle {
             Layout.preferredHeight: viewButtonRow.height
         }
 
-        QGCButton {
-            id:                 disconnectButton
-            text:               qsTr("Disconnect")
-            onClicked:          _activeVehicle.closeVehicle()
-            visible:            _activeVehicle && _communicationLost
-        }
+        // QGCButton {
+        //     id:                 disconnectButton
+        //     text:               qsTr("Disconnect")
+        //     onClicked:          _activeVehicle.closeVehicle()
+        //     visible:            _activeVehicle && _communicationLost
+        // }
     }
 
     QGCFlickable {
         id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+        anchors.leftMargin:     !ScreenTools.isMobile? ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5: ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 0.25
         anchors.left:           viewButtonRow.right
         anchors.bottomMargin:   1
         anchors.top:            parent.top
@@ -104,9 +104,11 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        // visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        visible:                ScreenTools.isMobile? !(QGroundControl.multiVehicleManager.vehicles.count > 1) : true
         fillMode:               Image.PreserveAspectFit
-        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+        // source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+        source:                 "/qmlimages/Dronetools/BrandImage";
         mipmap:                 true
 
         property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light

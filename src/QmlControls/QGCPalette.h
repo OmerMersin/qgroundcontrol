@@ -136,6 +136,7 @@ public:
     DEFINE_QGC_COLOR(mapWidgetBorderDark,           setMapWidgetBorderDark)
     DEFINE_QGC_COLOR(mapMissionTrajectory,          setMapMissionTrajectory)
     DEFINE_QGC_COLOR(brandingPurple,                setBrandingPurple)
+    DEFINE_QGC_COLOR(brandingGreen,                 setBrandingGreen)
     DEFINE_QGC_COLOR(brandingBlue,                  setBrandingBlue)
     DEFINE_QGC_COLOR(colorGreen,                    setColorGreen)
     DEFINE_QGC_COLOR(colorYellow,                   setColorYellow)

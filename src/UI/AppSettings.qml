@@ -32,6 +32,12 @@ Rectangle {
 
     property bool _commingFromRIDSettings:  false
 
+    property bool showAdvancedSettings:     mainWindow.enableAdministratorMode
+
+    onShowAdvancedSettingsChanged: {
+        rightPanel.source = "/qml/GeneralSettings.qml"
+    }
+
     function showSettingsPage(settingsPage) {
         for (var i=0; i<buttonRepeater.count; i++) {
             var button = buttonRepeater.itemAt(i)
@@ -85,8 +91,10 @@ Rectangle {
                     padding:            ScreenTools.defaultFontPixelWidth / 2
                     hoverEnabled:       !ScreenTools.isMobile
                     autoExclusive:      true
-                    icon.source:        iconUrl
-                    visible:            pageVisible()
+                    // icon.source:        iconUrl
+                    icon.source:        name === "General" ? "/res/DronetoolsLightLogo" : iconUrl
+                    // visible:            pageVisible()
+                    visible:            name === "General" || showAdvancedSettings
 
                     background: Rectangle {
                         color:      qgcPal.buttonHighlight
@@ -98,7 +106,7 @@ Rectangle {
                         spacing: ScreenTools.defaultFontPixelWidth
 
                         QGCColoredImage {
-                            source: iconUrl
+                            source: icon.source
                             color:  displayText.color
                             width:  ScreenTools.defaultFontPixelHeight
                             height: ScreenTools.defaultFontPixelHeight
@@ -140,8 +148,40 @@ Rectangle {
                     }
                 }
             }
-        }
-    }
+
+            Button {
+                            id:btnadv
+                            padding:            ScreenTools.defaultFontPixelWidth / 2
+                            autoExclusive:      true
+                            Layout.fillWidth:   true
+
+                            visible:            !showAdvancedSettings
+
+                            checked:            false
+
+                            background: Rectangle {
+                                color:  btnadv.checked ? qgcPal.buttonHighlight : "transparent"
+                                radius: ScreenTools.defaultFontPixelWidth / 2
+                            }
+
+                            contentItem: QGCLabel {
+                                text:   "Advanced mode"
+                                color:  btnadv.checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                            }
+
+                            onClicked: {
+                                focus = true
+                                btnadv.checked = true
+                                if (rightPanel.source !== "/qml/PassAdvancedMode.qml") {
+                                    rightPanel.source = "/qml/PassAdvancedMode.qml"
+                                }
+
+                            }
+
+                        }
+
+                    }
+                }
 
     Rectangle {
         id:                     divider
@@ -168,4 +208,3 @@ Rectangle {
         anchors.bottom:         parent.bottom
     }
 }
-

@@ -39,6 +39,14 @@ Rectangle {
     property bool   _fullParameterVehicleAvailable: QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable && !QGroundControl.multiVehicleManager.activeVehicle.parameterManager.missingParameters
     property var    _corePlugin:                    QGroundControl.corePlugin
 
+    property bool   advancedModeSetup:              mainWindow.enableAdministratorMode
+    property int    sensorsAdvancedMode:            0
+
+    onAdvancedModeSetupChanged: {
+           panelLoader.setSource("VehicleSummary.qml")
+           summaryButton.checked = true
+       }
+
     function showSummaryPanel() {
         if (mainWindow.allowViewSwitch()) {
             _showSummaryPanel()
@@ -69,6 +77,10 @@ Rectangle {
 
     function showVehicleComponentPanel(vehicleComponent)
     {
+        if(vehicleComponent.name.toLowerCase() === "sensors"){
+                            sensorsAdvancedMode ++
+                }
+
         if (mainWindow.allowViewSwitch()) {
             var autopilotPlugin = QGroundControl.multiVehicleManager.activeVehicle.autopilot
             var prereq = autopilotPlugin.prerequisiteSetup(vehicleComponent)
@@ -237,7 +249,7 @@ Rectangle {
                 imageResource:      "/qmlimages/FirmwareUpgradeIcon.png"
                 setupIndicator:     false
                 buttonGroup:     setupButtonGroup
-                visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
+                visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade && advancedModeSetup
                 text:               qsTr("Firmware")
                 Layout.fillWidth:   true
 
@@ -259,7 +271,7 @@ Rectangle {
                 setupIndicator:     true
                 setupComplete:      _activeJoystick ? _activeJoystick.calibrated || _buttonsOnly : false
                 buttonGroup:     setupButtonGroup
-                visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
+                visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0  && advancedModeSetup
                 text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
                 Layout.fillWidth:   true
                 onClicked:          showPanel(this, "JoystickConfig.qml")
@@ -279,7 +291,7 @@ Rectangle {
                     setupComplete:      modelData.setupComplete
                     buttonGroup:     setupButtonGroup
                     text:               modelData.name
-                    visible:            modelData.setupSource.toString() !== ""
+                    visible:            modelData.setupSource.toString() !== "" && advancedModeSetup
                     Layout.fillWidth:   true
                     onClicked:          showVehicleComponentPanel(componentUrl)
 
@@ -290,13 +302,21 @@ Rectangle {
             SubMenuButton {
                 id:                 parametersButton
                 setupIndicator:     false
-                buttonGroup:     setupButtonGroup
-                visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
-                                    !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
-                                    _corePlugin.showAdvancedUI
+                buttonGroup:        setupButtonGroup
+                visible:            advancedModeSetup
                 text:               qsTr("Parameters")
                 Layout.fillWidth:   true
                 onClicked:          showPanel(this, "SetupParameterEditor.qml")
+            }
+
+            SubMenuButton {
+                id:                 advancedMode
+                setupIndicator:     false
+                buttonGroup:        setupButtonGroup
+                visible:            !advancedModeSetup
+                text:               qsTr("Advanced Mode")
+                Layout.fillWidth:   true
+                onClicked:          showPanel(this, "PassAdvancedMode.qml")
             }
 
         }

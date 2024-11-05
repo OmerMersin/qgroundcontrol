@@ -375,10 +375,10 @@ Item {
                 coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
                 coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
                 coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
-				if(_utmspEnabled){
-                	QGroundControl.utmspManager.utmspVehicle.updateLastCoordinates(coordinate.latitude, coordinate.longitude)
+                if(_utmspEnabled){
+                    QGroundControl.utmspManager.utmspVehicle.updateLastCoordinates(coordinate.latitude, coordinate.longitude)
                 }
-                
+
                 switch (_editingLayer) {
                 case _layerMission:
                     if (addWaypointRallyPointAction.checked) {
@@ -397,9 +397,9 @@ Item {
 
                 case _layerUTMSP:
                     if (addWaypointRallyPointAction.checked) {
-                    	insertSimpleItemAfterCurrent(coordinate)
+                        insertSimpleItemAfterCurrent(coordinate)
                     } else if (_addROIOnClick) {
-                    	insertROIAfterCurrent(coordinate)
+                        insertROIAfterCurrent(coordinate)
                         _addROIOnClick = false
                     }
                     break

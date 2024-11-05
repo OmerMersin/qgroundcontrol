@@ -38,7 +38,7 @@ const QHash<QString, QString> AudioOutput::_textHash = {
     { "PREARM",         "pre arm" },
     { "PITOT",          "pee toe" },
     { "SERVOX_FUNCTION","Servo X Function" },
-};
+    };
 
 Q_APPLICATION_STATIC(AudioOutput, _audioOutput);
 

@@ -12,7 +12,7 @@
 #include "LinkManager.h"
 #include "QGCApplication.h"
 #ifndef NO_SERIAL_LINK
-    #include "SerialLink.h"
+#include "SerialLink.h"
 #endif
 #include "QGCLoggingCategory.h"
 
@@ -249,7 +249,7 @@ SharedLinkInterfacePtr VehicleLinkManager::_bestActivePrimaryLink(void)
             auto linkInterface = link.get();
             if (linkInterface && LinkManager::isLinkUSBDirect(linkInterface)) {
                 return link;
-            } 
+            }
         }
     }
 #endif
@@ -304,9 +304,9 @@ bool VehicleLinkManager::_updatePrimaryLink(void)
         if (bestActivePrimaryLink != primaryLink) {
             if (primaryLink && primaryLink->linkConfiguration()->isHighLatency()) {
                 _vehicle->sendMavCommand(MAV_COMP_ID_AUTOPILOT1,
-                               MAV_CMD_CONTROL_HIGH_LATENCY,
-                               true,
-                               0); // Stop transmission on this link
+                                         MAV_CMD_CONTROL_HIGH_LATENCY,
+                                         true,
+                                         0); // Stop transmission on this link
             }
 
             _primaryLink = bestActivePrimaryLink;
@@ -314,9 +314,9 @@ bool VehicleLinkManager::_updatePrimaryLink(void)
 
             if (bestActivePrimaryLink && bestActivePrimaryLink->linkConfiguration()->isHighLatency()) {
                 _vehicle->sendMavCommand(MAV_COMP_ID_AUTOPILOT1,
-                               MAV_CMD_CONTROL_HIGH_LATENCY,
-                               true,
-                               1); // Start transmission on this link
+                                         MAV_CMD_CONTROL_HIGH_LATENCY,
+                                         true,
+                                         1); // Start transmission on this link
             }
             return true;
         } else {

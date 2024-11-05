@@ -219,13 +219,13 @@ void ParameterManager::_handleParamValue(int componentId, QString parameterName,
 {
 
     qCDebug(ParameterManagerVerbose1Log) << _logVehiclePrefix(componentId) <<
-                                            "_parameterUpdate" <<
-                                            "name:" << parameterName <<
-                                            "count:" << parameterCount <<
-                                            "index:" << parameterIndex <<
-                                            "mavType:" << mavParamType <<
-                                            "value:" << parameterValue <<
-                                            ")";
+        "_parameterUpdate" <<
+        "name:" << parameterName <<
+        "count:" << parameterCount <<
+        "index:" << parameterIndex <<
+        "mavType:" << mavParamType <<
+        "value:" << parameterValue <<
+        ")";
 
     // ArduPilot has this strange behavior of streaming parameters that we didn't ask for. This even happens before it responds to the
     // PARAM_REQUEST_LIST. We disregard any of this until the initial request is responded to.
@@ -304,8 +304,8 @@ void ParameterManager::_handleParamValue(int componentId, QString parameterName,
     }
 
     if (!_waitingReadParamIndexMap[componentId].contains(parameterIndex) &&
-            !_waitingReadParamNameMap[componentId].contains(parameterName) &&
-            !_waitingWriteParamNameMap[componentId].contains(parameterName)) {
+        !_waitingReadParamNameMap[componentId].contains(parameterName) &&
+        !_waitingWriteParamNameMap[componentId].contains(parameterName)) {
         qCDebug(ParameterManagerVerbose1Log) << _logVehiclePrefix(componentId) << "Unrequested param update" << parameterName;
     }
 
@@ -1462,7 +1462,7 @@ bool ParameterManager::_parseParamFile(const QString& filename)
 
     qCDebug(ParameterManagerVerbose2Log) << "_parseParamFile: magic: 0x" << Qt::hex << magic;
     qCDebug(ParameterManagerVerbose2Log) << "_parseParamFile: num_params:" << num_params
-                                 << " total_params:" << total_params;
+                                         << " total_params:" << total_params;
 
     if ((magic != magic_standard) && (magic != magic_withdefaults)) {
         qCDebug(ParameterManagerLog) << "_parseParamFile: Error: File does not start with Magic";
@@ -1513,31 +1513,31 @@ bool ParameterManager::_parseParamFile(const QString& filename)
         common_len = byte & 0x0F;
         if ((name_len + common_len) > 16) {
             qCritical(ParameterManagerLog) << "_parseParamFile: Error: common_len + name_len > 16 "
-                                         << "name_len" << name_len
-                                         << "common_len" << common_len;
+                                           << "name_len" << name_len
+                                           << "common_len" << common_len;
             goto Error;
         }
         no_read = in.readRawData(&name_buffer[common_len], (int) name_len);
         if (no_read != name_len) {
             qCritical(ParameterManagerLog) << "_parseParamFile: Error: Unexpected EOF while reading parameterName"
-                                         << "Expected:" << name_len
-                                         << "Actual:" << no_read;
+                                           << "Expected:" << name_len
+                                           << "Actual:" << no_read;
             goto Error;
         }
         name_buffer[common_len + name_len] = '\0';
         QString parameterName(name_buffer);
         qCDebug(ParameterManagerVerbose2Log) << "_parseParamFile: parameter" << parameterName
-                                     << "name_len" << name_len
-                                     << "common_len" << common_len
-                                     << "ptype" << ptype
-                                     << "flags" << flags;
+                                             << "name_len" << name_len
+                                             << "common_len" << common_len
+                                             << "ptype" << ptype
+                                             << "flags" << flags;
 
         QVariant parameterValue = 0;
         switch ((enum ap_var_type) ptype) {
-        qint8 data8;
-        qint16 data16;
-        qint32 data32;
-        float dfloat;
+            qint8 data8;
+            qint16 data16;
+            qint32 data32;
+            float dfloat;
         case AP_PARAM_INT8:
             in >> data8;
             parameterValue = data8;
@@ -1578,9 +1578,9 @@ bool ParameterManager::_parseParamFile(const QString& filename)
         }
 
         FactMetaData::ValueType_t factType = (ptype == AP_PARAM_INT8  ? FactMetaData::valueTypeInt8  :
-                                              ptype == AP_PARAM_INT16 ? FactMetaData::valueTypeInt16 :
-                                              ptype == AP_PARAM_INT32 ? FactMetaData::valueTypeInt32 :
-                                              FactMetaData::valueTypeFloat);
+                                                  ptype == AP_PARAM_INT16 ? FactMetaData::valueTypeInt16 :
+                                                  ptype == AP_PARAM_INT32 ? FactMetaData::valueTypeInt32 :
+                                                  FactMetaData::valueTypeFloat);
 
         Fact* fact = nullptr;
         if (_mapCompId2FactMap.contains(componentId) && _mapCompId2FactMap[componentId].contains(parameterName)) {
