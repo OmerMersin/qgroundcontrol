@@ -34,7 +34,7 @@ ApplicationWindow {
     property bool   _utmspStartTelemetry
 
 
-    property bool   enableAdministratorMode:   true
+    property bool   enableAdministratorMode:   false
 
 
     Component.onCompleted: {
@@ -343,6 +343,7 @@ ApplicationWindow {
                             width:                  innerLayout.width
                             spacing:                0
                             Layout.alignment:       Qt.AlignHCenter
+                            visible:                false
 
                             QGCLabel {
                                 id:                     versionLabel
@@ -847,4 +848,41 @@ ApplicationWindow {
          flightID:                   UTMSPStateStorage.flightID
          anchors.fill:               parent
     }
+
+    // Additional function to load parameters after confirmation
+        function loadParameters(vehicle) {
+            console.log("****** Calling load parameters ********")
+            vehicle.parameterManager.refreshAllParameters()
+        }
+
+        Component {
+            id: vehicleConnectionComponent
+
+            Connections {
+                target: null
+
+                function onInitialConnectComplete() {
+                    console.log(`New vehicle connection complete: ${target} - ${target.id}`)
+                    mainWindow.showMessageDialog(
+                        "Parameters",
+                        qsTr(`Do you want to load parameters for vehicle ${target.id}?`),
+                        Dialog.Yes | Dialog.No,
+                        function() { loadParameters(target) }
+                    )
+                }
+            }
+        }
+
+        // Load a connection component for each vehicle
+        Repeater {
+            model: QGroundControl.multiVehicleManager.vehicles
+            Loader {
+                active: model.count > 0
+                sourceComponent: vehicleConnectionComponent
+                onLoaded: {
+                    item.target = model.modelData
+                }
+            }
+        }
 }
+

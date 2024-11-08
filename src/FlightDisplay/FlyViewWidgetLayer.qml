@@ -70,30 +70,115 @@ Item {
         bottomEdgeRightInset:   virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeRightInset : bottomRightRowLayout.bottomEdgeRightInset
     }
 
+// n
     FlyViewTopRightColumnLayout {
         id:                 topRightColumnLayout
         anchors.margins:    _layoutMargin
-        anchors.top:        parent.top
+        anchors.top:        instrumentPanel.bottom
         anchors.bottom:     bottomRightRowLayout.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
+        visible:            false
 
         property real topEdgeRightInset:    childrenRect.height + _layoutMargin
         property real rightEdgeTopInset:    width + _layoutMargin
         property real rightEdgeCenterInset: rightEdgeTopInset
     }
 
+// n
     FlyViewBottomRightRowLayout {
-        id:                 bottomRightRowLayout
-        anchors.margins:    _layoutMargin
-        anchors.bottom:     parent.bottom
-        anchors.right:      parent.right
-        spacing:            _layoutSpacing
+           id:                 bottomRightRowLayout
+           anchors.margins:    _layoutMargin
+           anchors.bottom:     parent.bottom
+           anchors.right:      parent.right
+           spacing:            _layoutSpacing
+           visible:            false
 
-        property real bottomEdgeRightInset:     height + _layoutMargin
-        property real bottomEdgeCenterInset:    bottomEdgeRightInset
-        property real rightEdgeBottomInset:     width + _layoutMargin
+           property real bottomEdgeRightInset:     height + _layoutMargin
+           property real bottomEdgeCenterInset:    bottomEdgeRightInset
+           property real rightEdgeBottomInset:     width + _layoutMargin
+       }
+
+    TelemetryValuesBar {
+            id: telemetryValuesBar
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: _toolsMargin
+            extraWidth: instrumentPanel.extraValuesWidth
+            z: QGroundControl.zOrderWidgets
+            visible: _showSingleVehicleUI
+        }
+
+    RowLayout {
+        id:                 multiVehiclePanelSelector
+        anchors.top:        parent.top
+        anchors.right:      parent.right
+        anchors.margins:    _toolsMargin
+        spacing:            ScreenTools.defaultFontPixelWidth
+        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+
+        QGCMapPalette { id: mapPal; lightColors: true }
+
+        QGCRadioButton {
+            id:             singleVehicleRadio
+            text:           qsTr("Single")
+            checked:        _showSingleVehicleUI
+            onClicked:      _showSingleVehicleUI = true
+            textColor:      mapPal.text
+        }
+
+        QGCRadioButton {
+            text:           qsTr("Multi-Vehicle")
+            textColor:      mapPal.text
+            onClicked:      _showSingleVehicleUI = false
+        }
     }
+
+    TerrainProgress {
+        anchors.top: multiVehiclePanelSelector.bottom
+        anchors.right: parent.right
+        Layout.preferredWidth:  _rightPanelWidth
+    }
+
+    Loader {
+        id:                 photoVideoControlLoader
+        anchors.top:        instrumentPanel.bottom
+        anchors.right:      parent.right
+        anchors.margins:    _toolsMargin
+        anchors.topMargin:  _toolsMargin * 2
+        sourceComponent:    globals.activeVehicle && _showSingleVehicleUI ? photoVideoControlComponent : undefined
+
+        property real rightEdgeCenterInset: visible ? parent.width - x : 0
+
+        Component {
+            id: photoVideoControlComponent
+
+            PhotoVideoControl {
+            }
+        }
+    }
+
+    MultiVehicleList {
+        anchors.top:            multiVehiclePanelSelector.bottom
+        anchors.right:          parent.right
+        anchors.bottom:         parent.bottom
+        Layout.preferredWidth:  _rightPanelWidth
+        Layout.fillHeight:      true
+        width:                  _rightPanelWidth
+        anchors.margins:        _toolsMargin
+        visible:                !_showSingleVehicleUI
+    }
+
+    FlyViewInstrumentPanel {
+        id:         instrumentPanel
+        anchors.top: multiVehiclePanelSelector.bottom
+        anchors.right: parent.right
+        // anchors.topMargin: _toolsMargin
+        anchors.margins:  _toolsMargin
+        z: QGroundControl.zOrderWidgets
+        visible:    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
+    }
+
 
     FlyViewMissionCompleteDialog {
         missionController:      _missionController
@@ -103,8 +188,9 @@ Item {
 
     GuidedActionConfirm {
         anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
-        anchors.horizontalCenter:   parent.horizontalCenter
+        // anchors.top:                parent.top
+        // anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.centerIn:   parent
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
         guidedValueSlider:          _guidedValueSlider
@@ -161,7 +247,7 @@ Item {
         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left:           parent.left
-        anchors.top:            parent.top
+        anchors.top:            mapScale.bottom
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
         visible:                !QGroundControl.videoManager.fullScreen
@@ -186,11 +272,12 @@ Item {
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
-        anchors.left:       toolStrip.right
+        anchors.left:       parent.left
         anchors.top:        parent.top
         mapControl:         _mapControl
         buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
+        // visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
+        visible:            true
 
         property real topEdgeCenterInset: visible ? y + height : 0
     }

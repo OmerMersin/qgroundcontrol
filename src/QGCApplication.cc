@@ -184,12 +184,16 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
         applicationName = QGC_APP_NAME;
 #endif
     }
+    applicationName = "DTGroundControl";
     setApplicationName(applicationName);
     setOrganizationName(QGC_ORG_NAME);
     setOrganizationDomain(QGC_ORG_DOMAIN);
     setApplicationVersion(QString(QGC_APP_VERSION_STR));
+#ifdef Q_OS_WIN
+    setWindowIcon(QIcon(":/res/dronetools.ico"));
+#endif
     #ifdef Q_OS_LINUX
-        setWindowIcon(QIcon(":/res/qgroundcontrol.ico"));
+        setWindowIcon(QIcon(":/res/dronetools.ico"));
     #endif
 
     // Set settings format

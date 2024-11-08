@@ -52,6 +52,8 @@ FlightMap {
     property bool   _keepVehicleCentered:       pipMode ? true : false
     property bool   _saveZoomLevelSetting:      true
 
+    property int    _numberOfVehicles:          QGroundControl.multiVehicleManager.vehicles.count
+
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
         if (pipMode) {
@@ -625,6 +627,19 @@ FlightMap {
                         popup.close()
                     }
                     globals.guidedControllerFlyView.executeAction(globals.guidedControllerFlyView.actionROI, mapClickCoord, 0, false)
+                }
+            }
+
+            QGCButton {
+                Layout.fillWidth: true
+                text: `Go to location (${_numberOfVehicles}), keep distance`
+                visible: _numberOfVehicles > 1
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    gotoLocationItem.show(mapClickCoord)
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionPatron, mapClickCoord, gotoLocationItem)
                 }
             }
 

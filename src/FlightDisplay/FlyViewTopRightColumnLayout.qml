@@ -69,6 +69,7 @@ ColumnLayout {
     MultiVehicleList {
         Layout.preferredWidth:  _rightPanelWidth
         Layout.fillHeight:      true
+        Layout.alignment:       Qt.AlignTop
         visible:                !_showSingleVehicleUI
     }
 }

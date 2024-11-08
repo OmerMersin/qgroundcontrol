@@ -52,7 +52,11 @@ RowLayout {
 
             MouseArea {
                 anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
+                // onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
+                onClicked: {
+                            // Override the click event to do nothing
+                            // This makes the flight mode indicator non-clickable
+                        }
             }
         }
     }

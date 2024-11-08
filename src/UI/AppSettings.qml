@@ -94,7 +94,8 @@ Rectangle {
                     // icon.source:        iconUrl
                     icon.source:        name === "General" ? "/res/DronetoolsLightLogo" : iconUrl
                     // visible:            pageVisible()
-                    visible:            name === "General" || showAdvancedSettings
+                    // visible:            name === "General" || showAdvancedSettings
+                    visible: name === "General" || name === "Comm Links" || name === "Maps" || showAdvancedSettings
 
                     background: Rectangle {
                         color:      qgcPal.buttonHighlight

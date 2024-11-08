@@ -93,6 +93,7 @@ Rectangle {
         anchors.right:          parent.right
         contentWidth:           toolIndicators.width
         flickableDirection:     Flickable.HorizontalFlick
+        // enabled:                true
 
         FlyViewToolBarIndicators { id: toolIndicators }
     }
@@ -104,7 +105,6 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        // visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
         visible:                ScreenTools.isMobile? !(QGroundControl.multiVehicleManager.vehicles.count > 1) : true
         fillMode:               Image.PreserveAspectFit
         // source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor

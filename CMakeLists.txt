@@ -1,8 +1,4 @@
-cmake_policy(SET CMP0100 NEW)
-
-
 cmake_minimum_required(VERSION 3.22.1)
-
 
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake

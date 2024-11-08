@@ -120,6 +120,9 @@ Item {
     readonly property int actionSetFlightMode:              29
     readonly property int actionChangeHeading:              30
 
+        readonly property int actionPatron:                     31
+        readonly property string patronMessage:                 qsTr("Go to the next point keeping your distance")
+
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
     property var    _unitsConversion:           QGroundControl.unitsConversion
@@ -552,6 +555,11 @@ Item {
             confirmDialog.title = changeHeadingTitle
             confirmDialog.message = changeHeadingMessage
             break
+        case actionPatron:
+            confirmDialog.title = gotoTitle
+            confirmDialog.message = patronMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return !showGotoLocation })
+            break;
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -664,6 +672,25 @@ Item {
         case actionChangeHeading:
             _activeVehicle.guidedModeChangeHeading(actionData)
             break
+        case actionPatron:
+                    // Codigo => 8
+                    rgVehicle = QGroundControl.multiVehicleManager.vehicles
+                    const {latitude:latActVehicle,longitude:longActVehicle} = _activeVehicle.coordinate;
+        console.log(`Active vehicle pos: ${rgVehicle}, ${rgVehicle.count}`);
+                    for (i = 0; i < rgVehicle.count; i++) {
+                        if(_activeVehicle.id === rgVehicle.get(i).id){
+                             rgVehicle.get(i).guidedModeGotoLocation(actionData);
+                            continue
+                        }
+                        const {latitude,longitude} = rgVehicle.get(i).coordinate;
+                        const diferenciaLatitud  = (latActVehicle  - latitude)  * (-1);
+                        const diferenciaLongitud = (longActVehicle - longitude) * (-1);
+                        let actionDataOffset = Object.assign({},actionData);
+                        actionDataOffset.latitude  += diferenciaLatitud  ;
+                        actionDataOffset.longitude += diferenciaLongitud ;
+                        rgVehicle.get(i).guidedModeGotoLocation(actionDataOffset)
+                    }
+                    break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
             break
