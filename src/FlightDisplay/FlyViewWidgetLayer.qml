@@ -104,7 +104,7 @@ Item {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: _toolsMargin
-            extraWidth: instrumentPanel.extraValuesWidth
+            extraWidth: instrumentPanel.extraValuesWidth - 40
             z: QGroundControl.zOrderWidgets
             visible: _showSingleVehicleUI
         }
@@ -171,7 +171,7 @@ Item {
 
     FlyViewInstrumentPanel {
         id:         instrumentPanel
-        anchors.top: multiVehiclePanelSelector.bottom
+        anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.right: parent.right
         // anchors.topMargin: _toolsMargin
         anchors.margins:  _toolsMargin

@@ -270,7 +270,7 @@ Rectangle {
                 imageResource:      "/qmlimages/Joystick.png"
                 setupIndicator:     true
                 setupComplete:      _activeJoystick ? _activeJoystick.calibrated || _buttonsOnly : false
-                buttonGroup:     setupButtonGroup
+                buttonGroup:        setupButtonGroup
                 visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0  && advancedModeSetup
                 text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
                 Layout.fillWidth:   true
@@ -281,23 +281,37 @@ Rectangle {
                 property bool   _forcedToButtonsOnly:   !QGroundControl.corePlugin.options.allowJoystickSelection && _buttonsOnly
             }
 
+            SubMenuButton {
+                id:                 sensorsButton
+                imageResource:      "/qmlimages/SensorsComponentIcon.png"
+                setupIndicator:     true
+                buttonGroup:        setupButtonGroup
+                visible:            _fullParameterVehicleAvailable && !advancedModeSetup
+                text:               qsTr("Sensors")
+                Layout.fillWidth:   true
+                onClicked:          showPanel(this, "APMSensorsComponent.qml")
+            }
+
+
             Repeater {
-                id:     componentRepeater
-                model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilot.vehicleComponents : 0
+                id: componentRepeater
+                model: _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilot.vehicleComponents : 0
 
                 SubMenuButton {
-                    imageResource:      modelData.iconResource
-                    setupIndicator:     modelData.requiresSetup
-                    setupComplete:      modelData.setupComplete
-                    buttonGroup:     setupButtonGroup
-                    text:               modelData.name
-                    visible:            modelData.setupSource.toString() !== "" && advancedModeSetup
-                    Layout.fillWidth:   true
-                    onClicked:          showVehicleComponentPanel(componentUrl)
+                    imageResource: modelData.iconResource
+                    setupIndicator: modelData.requiresSetup
+                    setupComplete: modelData.setupComplete
+                    buttonGroup: setupButtonGroup
+                    text: modelData.name
+                    visible: modelData.setupSource.toString() !== "" && advancedModeSetup
+                    Layout.fillWidth: true
+                    onClicked: showVehicleComponentPanel(componentUrl)
 
                     property var componentUrl: modelData
                 }
             }
+
+
 
             SubMenuButton {
                 id:                 parametersButton

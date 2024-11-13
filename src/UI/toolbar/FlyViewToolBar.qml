@@ -98,6 +98,41 @@ Rectangle {
         FlyViewToolBarIndicators { id: toolIndicators }
     }
 
+    Rectangle {
+        id: escTemperatureArea
+        width: ScreenTools.defaultFontPixelWidth * 24
+        height: parent.height
+        color: "blue"
+        anchors.left:           viewButtonRow.right
+        anchors.bottom:         parent.bottom
+
+        RowLayout {
+            anchors.centerIn: parent
+
+            QGCLabel {
+                text: qsTr("ESC Temps")
+                font.bold: true
+                color: qgcPal.text
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Repeater {
+                model: _activeVehicle ? _activeVehicle.escs : 0
+                QGCLabel {
+                    text: qsTr("ESC %1: %2°C").arg(index + 1).arg(modelData.temperature ? modelData.temperature.toFixed(1) : "No Data")
+                    color: modelData.temperature > 80 ? qgcPal.colorRed : qgcPal.text  // Red if temp > 80°C
+                    font.pointSize: ScreenTools.smallFontPointSize
+                }
+                onItemAdded: console.log("Added ESC temp item for index:", index, "Temperature:", modelData.temperature)
+            }
+
+        }
+    }
+
+
+
+
+
     //-------------------------------------------------------------------------
     //-- Branding Logo
     Image {

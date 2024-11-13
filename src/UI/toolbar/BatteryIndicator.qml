@@ -89,67 +89,147 @@ Item {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
 
+            // function getBatteryColor() {
+            //     switch (battery.chargeState.rawValue) {
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
+            //             if (!isNaN(battery.percentRemaining.rawValue)) {
+            //                 if (battery.percentRemaining.rawValue > threshold1) {
+            //                     return qgcPal.colorGreen
+            //                 } else if (battery.percentRemaining.rawValue > threshold2) {
+            //                     return qgcPal.colorYellowGreen
+            //                 } else {
+            //                     return qgcPal.colorYellow
+            //                 }
+            //             } else {
+            //                 return qgcPal.text
+            //             }
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
+            //             return qgcPal.colorOrange
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_EMERGENCY:
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_FAILED:
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
+            //             return qgcPal.colorRed
+            //         default:
+            //             return qgcPal.text
+            //     }
+            // }
+
+            // function getBatterySvgSource() {
+            //     switch (battery.chargeState.rawValue) {
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
+            //             if (!isNaN(battery.percentRemaining.rawValue)) {
+            //                 if (battery.percentRemaining.rawValue > threshold1) {
+            //                     return "/qmlimages/BatteryGreen.svg"
+            //                 } else if (battery.percentRemaining.rawValue > threshold2) {
+            //                     return "/qmlimages/BatteryYellowGreen.svg"
+            //                 } else {
+            //                     return "/qmlimages/BatteryYellow.svg"
+            //                 }
+            //             }
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
+            //             return "/qmlimages/BatteryOrange.svg" // Low with orange svg
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
+            //             return "/qmlimages/BatteryCritical.svg" // Critical with red svg
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_EMERGENCY:
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_FAILED:
+            //         case MAVLink.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
+            //             return "/qmlimages/BatteryEMERGENCY.svg" // Exclamation mark
+            //         default:
+            //             return "/qmlimages/Battery.svg" // Fallback if percentage is unavailable
+            //     }
+            // }
+
             function getBatteryColor() {
-                switch (battery.chargeState.rawValue) {
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                        if (!isNaN(battery.percentRemaining.rawValue)) {
-                            if (battery.percentRemaining.rawValue > threshold1) {
-                                return qgcPal.colorGreen
-                            } else if (battery.percentRemaining.rawValue > threshold2) {
-                                return qgcPal.colorYellowGreen
-                            } else {
-                                return qgcPal.colorYellow
-                            }
-                        } else {
-                            return qgcPal.text
-                        }
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
-                        return qgcPal.colorOrange
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_EMERGENCY:
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_FAILED:
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
-                        return qgcPal.colorRed
-                    default:
-                        return qgcPal.text
+                var percentageText = getBatteryPercentageText();
+                var percentage = parseInt(percentageText.replace("%", ""));
+
+                if (!isNaN(percentage)) {
+                    if (percentage >= 75) {
+                        return qgcPal.colorGreen;
+                    } else if (percentage >= 50) {
+                        return qgcPal.colorYellowGreen;
+                    } else if (percentage >= 25) {
+                        return qgcPal.colorYellow;
+                    } else if (percentage >= 10) {
+                        return qgcPal.colorOrange;
+                    } else {
+                        return qgcPal.colorRed;
+                    }
                 }
+                return qgcPal.text; // Default color if percentage is unavailable
             }
 
             function getBatterySvgSource() {
-                switch (battery.chargeState.rawValue) {
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                        if (!isNaN(battery.percentRemaining.rawValue)) {
-                            if (battery.percentRemaining.rawValue > threshold1) {
-                                return "/qmlimages/BatteryGreen.svg"
-                            } else if (battery.percentRemaining.rawValue > threshold2) {
-                                return "/qmlimages/BatteryYellowGreen.svg"
-                            } else {
-                                return "/qmlimages/BatteryYellow.svg"
-                            }
-                        }
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
-                        return "/qmlimages/BatteryOrange.svg" // Low with orange svg
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
-                        return "/qmlimages/BatteryCritical.svg" // Critical with red svg
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_EMERGENCY:
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_FAILED:
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
-                        return "/qmlimages/BatteryEMERGENCY.svg" // Exclamation mark
-                    default:
-                        return "/qmlimages/Battery.svg" // Fallback if percentage is unavailable
+                var percentageText = getBatteryPercentageText();
+                var percentage = parseInt(percentageText.replace("%", ""));
+
+                if (!isNaN(percentage)) {
+                    if (percentage >= 75) {
+                        return "/qmlimages/BatteryGreen.svg";
+                    } else if (percentage >= 50) {
+                        return "/qmlimages/BatteryYellowGreen.svg";
+                    } else if (percentage >= 25) {
+                        return "/qmlimages/BatteryYellow.svg";
+                    } else if (percentage >= 10) {
+                        return "/qmlimages/BatteryOrange.svg";
+                    } else {
+                        return "/qmlimages/BatteryCritical.svg"; // Critical with red SVG
+                    }
                 }
+                return "/qmlimages/Battery.svg"; // Fallback if percentage is unavailable
             }
 
-            function getBatteryPercentageText() {
-                if (!isNaN(battery.percentRemaining.rawValue)) {
-                    if (battery.percentRemaining.rawValue > 98.9) {
-                        return qsTr("100%")
+
+            // function getBatteryPercentageText() {
+            //     if (!isNaN(battery.percentRemaining.rawValue)) {
+            //         if (battery.percentRemaining.rawValue > 98.9) {
+            //             return qsTr("100%")
+            //         } else {
+            //             return battery.percentRemaining.valueString + battery.percentRemaining.units
+            //         }
+            //     }
+            //     return qsTr("n/a")
+            // }
+
+            function getBatteryPercentageText(){
+                var voltage = battery.voltage.rawValue
+                var cellVoltage, percentage = "n/a"
+
+                function interpolate(minVoltage, maxVoltage, minPercentage, maxPercentage, voltage) {
+                    return ((voltage - minVoltage) / (maxVoltage - minVoltage)) * (maxPercentage - minPercentage) + minPercentage
+                }
+
+                if(!isNaN(voltage)){
+                    if (voltage > 25) {
+                        cellVoltage = voltage / 12
+                    } else if (voltage < 25) {
+                        cellVoltage = voltage / 6
                     } else {
-                        return battery.percentRemaining.valueString + battery.percentRemaining.units
+                        return battery.chargeState.enumStringValue
                     }
+
+                    if(cellVoltage > 3.9166){
+                        percentage = 100
+                    } else if(cellVoltage > 3.75) {
+                        percentage = interpolate(3.75, 3.9166, 75, 100, cellVoltage)
+                    } else if(cellVoltage > 3.5583) {
+                        percentage = interpolate(3.5583, 3.75, 50, 75, cellVoltage)
+                    } else if(cellVoltage > 3.4166) {
+                        percentage = interpolate(3.4166, 3.5583, 30, 50, cellVoltage)
+                    } else if(cellVoltage > 3.3333) {
+                        percentage = interpolate(3.3333, 3.4166, 25, 30, cellVoltage)
+                    } else if(cellVoltage > 3.25) {
+                        percentage = interpolate(3.25, 3.3333, 10, 25, cellVoltage)
+                    } else {
+                        percentage = 0
+                    }
+
+                    return `${Math.round(percentage)}%`
                 }
                 return qsTr("n/a")
             }
+
 
             function getBatteryVoltageText() {
                 if (!isNaN(battery.voltage.rawValue)) {
@@ -179,7 +259,7 @@ Item {
                 id:                     batteryInfoColumn
                 anchors.top:            parent.top  // Aligns the column to the top of the toolbar
                 anchors.topMargin:      -ScreenTools.defaultFontPixelHeight * 0.5  // Adds some padding from the top
-                spacing:                ScreenTools.defaultFontPixelWidth / 2     // Reduces space between elements
+                spacing:                0     // Reduces space between elements
 
                 // Percentage
                 QGCLabel {

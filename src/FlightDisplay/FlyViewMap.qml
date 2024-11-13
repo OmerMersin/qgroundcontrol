@@ -54,6 +54,9 @@ FlightMap {
 
     property int    _numberOfVehicles:          QGroundControl.multiVehicleManager.vehicles.count
 
+    property var gotoTargetCoordinate
+
+
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
         if (pipMode) {
@@ -238,6 +241,25 @@ FlightMap {
         }
     }
 
+    Connections {
+        target: _activeVehicle
+        onCoordinateChanged: {
+            if (gotoLocationItem.visible && gotoTargetCoordinate) {
+                // Define a tolerance for "reaching" the destination, e.g., 1 meter
+                const tolerance = 0.00001; // Approximately 1 meter
+
+                // Check if the vehicle is close to the target
+                if (Math.abs(_activeVehicle.coordinate.latitude - gotoTargetCoordinate.latitude) < tolerance &&
+                    Math.abs(_activeVehicle.coordinate.longitude - gotoTargetCoordinate.longitude) < tolerance) {
+                    // Hide the gotoLocationItem
+                    gotoLocationItem.hide();
+                    gotoTargetCoordinate = null; // Clear the target to stop further checks
+                }
+            }
+        }
+    }
+
+
     MapFitFunctions {
         id:                         mapFitFunctions // The name for this id cannot be changed without breaking references outside of this code. Beware!
         map:                        _root
@@ -413,6 +435,7 @@ FlightMap {
         }
 
         function show(coord) {
+            gotoTargetCoordinate = coord;  // Set the target coordinate
             gotoLocationItem.coordinate = coord
             gotoLocationItem.visible = true
         }
@@ -607,6 +630,31 @@ FlightMap {
 
             QGCButton {
                 Layout.fillWidth:   true
+                text:               qsTr("Set home here")
+                visible:            globals.guidedControllerFlyView.showSetHome
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
+                }
+            }
+
+
+            QGCButton {
+                Layout.fillWidth:   true
+                text:               qsTr("Set Heading")
+                visible:            globals.guidedControllerFlyView.showChangeHeading
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord)
+                }
+            }
+
+            QGCButton {
+                Layout.fillWidth:   true
                 text:               qsTr("Orbit at location")
                 visible:            globals.guidedControllerFlyView.showOrbit
                 onClicked: {
@@ -633,7 +681,7 @@ FlightMap {
             QGCButton {
                 Layout.fillWidth: true
                 text: `Go to location (${_numberOfVehicles}), keep distance`
-                visible: _numberOfVehicles > 1
+                visible: _numberOfVehicles > 1 && globals.guidedControllerFlyView.showPatron
                 onClicked: {
                     if (popup.opened) {
                         popup.close()
@@ -644,21 +692,38 @@ FlightMap {
             }
 
             QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Set home here")
-                visible:            globals.guidedControllerFlyView.showSetHome
+                Layout.fillWidth: true
+                text: `Go to location (${_numberOfVehicles}), to same spot`
+                visible: _numberOfVehicles > 1 && globals.guidedControllerFlyView.showGather
                 onClicked: {
                     if (popup.opened) {
                         popup.close()
                     }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
+                    gotoLocationItem.show(mapClickCoord)
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionGather, mapClickCoord, gotoLocationItem)
+                    // if (!globals.guidedControllerFlyView.showGotoLocationItem) {
+                    //     gotoLocationItem.hide()
+                    // }
+                }
+            }
+
+            QGCButton {
+                Layout.fillWidth: true
+                text: `Set heading (${_numberOfVehicles}), all`
+                visible: _numberOfVehicles > 1 && globals.guidedControllerFlyView.showDirectAll
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionDirectAll, mapClickCoord)
                 }
             }
 
             QGCButton {
                 Layout.fillWidth:   true
                 text:               qsTr("Set Estimator Origin")
-                visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                // visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                visible:            false
                 onClicked: {
                     if (popup.opened) {
                         popup.close()
@@ -667,17 +732,6 @@ FlightMap {
                 }
             }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Set Heading")
-                visible:            globals.guidedControllerFlyView.showChangeHeading
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord)
-                }
-            }
 
             ColumnLayout {
                 spacing: 0

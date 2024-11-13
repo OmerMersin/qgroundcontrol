@@ -123,6 +123,12 @@ Item {
         readonly property int actionPatron:                     31
         readonly property string patronMessage:                 qsTr("Go to the next point keeping your distance")
 
+        readonly property int actionGather:                     32
+        readonly property string gatherMessage:                 qsTr("Gather all vehicles at the same point")
+
+        readonly property int actionDirectAll:                     33
+        readonly property string directAllMessage:                 qsTr("Direct all vehicles to the same point")
+
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
     property var    _unitsConversion:           QGroundControl.unitsConversion
@@ -155,7 +161,11 @@ Item {
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
     property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
-
+// s
+    property bool showPatron:               _guidedActionsEnabled && _vehicleFlying
+    property bool showGather:               _guidedActionsEnabled && _vehicleFlying
+    property bool showDirectAll:            _guidedActionsEnabled && _vehicleFlying
+// f
     property string changeSpeedTitle:   _fixedWing ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _fixedWing ? changeAirspeedMessage : changeCruiseSpeedMessage
 
@@ -558,7 +568,16 @@ Item {
         case actionPatron:
             confirmDialog.title = gotoTitle
             confirmDialog.message = patronMessage
-            confirmDialog.hideTrigger = Qt.binding(function() { return !showGotoLocation })
+            confirmDialog.hideTrigger = Qt.binding(function() { return !showPatron })
+            break;
+        case actionGather:
+            confirmDialog.title = gotoTitle
+            confirmDialog.message = gatherMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return !showGather })
+            break;
+        case actionDirectAll:
+            confirmDialog.title = changeHeadingTitle
+            confirmDialog.message = directAllMessage
             break;
         default:
             console.warn("Unknown actionCode", actionCode)
@@ -673,10 +692,8 @@ Item {
             _activeVehicle.guidedModeChangeHeading(actionData)
             break
         case actionPatron:
-                    // Codigo => 8
                     rgVehicle = QGroundControl.multiVehicleManager.vehicles
                     const {latitude:latActVehicle,longitude:longActVehicle} = _activeVehicle.coordinate;
-        console.log(`Active vehicle pos: ${rgVehicle}, ${rgVehicle.count}`);
                     for (i = 0; i < rgVehicle.count; i++) {
                         if(_activeVehicle.id === rgVehicle.get(i).id){
                              rgVehicle.get(i).guidedModeGotoLocation(actionData);
@@ -691,6 +708,50 @@ Item {
                         rgVehicle.get(i).guidedModeGotoLocation(actionDataOffset)
                     }
                     break
+        case actionGather:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            var sameAltitude = true
+            var altitudeTolerance = 3.0 // Tolerance of 3 meters
+
+            // Check if all vehicles are within altitude tolerance of each other
+            for (let i = 0; i < rgVehicle.count; i++) {
+                let altitudeI = rgVehicle.get(i).altitudeRelative.rawValue
+
+                for (let j = i + 1; j < rgVehicle.count; j++) {
+                    let altitudeJ = rgVehicle.get(j).altitudeRelative.rawValue
+                    let altitudeDiff = Math.abs(altitudeI - altitudeJ)
+                    if (altitudeDiff > altitudeTolerance) {
+                        sameAltitude = false
+                    } else {
+                        sameAltitude = true
+                        break
+                    }
+                }
+                if (sameAltitude) {
+                    break
+                }
+            }
+
+            if (sameAltitude) {
+                mainWindow.showMessageDialog(qsTr("Action Aborted"), qsTr("All vehicles are already at the same altitude."));
+                return; // Exit the function early
+            }
+
+            // Move all vehicles to the map-clicked location (actionData)
+            for (let i = 0; i < rgVehicle.count; i++) {
+                var vehicle = rgVehicle.get(i)
+                vehicle.guidedModeGotoLocation(actionData)
+            }
+            break
+
+        case actionDirectAll:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            // Loop through each vehicle and set its destination to the clicked location
+            for (i = 0; i < rgVehicle.count; i++) {
+                var vehicle = rgVehicle.get(i)
+                vehicle.guidedModeChangeHeading(actionData) // Direct each vehicle to the same specified location
+            }
+            break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
             break

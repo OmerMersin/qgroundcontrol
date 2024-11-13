@@ -90,6 +90,7 @@ Rectangle {
                             if(passwordField.text === advancedModePass){
                                 if(typeof(settingsView) !== "undefined"){
                                     settingsView.showAdvancedSettings = true
+
                                 }
 
                                 if(typeof(setupView) !== "undefined"){
