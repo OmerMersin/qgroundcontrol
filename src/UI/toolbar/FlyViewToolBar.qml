@@ -100,12 +100,15 @@ Rectangle {
 
     Rectangle {
         id: escTemperatureArea
-        width: ScreenTools.defaultFontPixelWidth * 18
         height: parent.height
-        color: "transparents"
+        color: "transparent"
         anchors.right: brandingImage.left
         anchors.bottom: parent.bottom
+        anchors.rightMargin:        ScreenTools.defaultFontPixelHeight * 0.66
         visible:_activeVehicle
+
+        // Dynamically adjust width and height based on content
+            implicitWidth: rowContent.implicitWidth
 
         function getMaxTemperature() {
             const temperatures = [
@@ -118,13 +121,14 @@ Rectangle {
         }
 
         RowLayout {
+            id: rowContent
             anchors.centerIn: parent
 
             // Temperature indicator dot
             Rectangle {
-                width: 30
-                height: 30
-                radius: 15   // Make it circular
+                width: ScreenTools.isMobile ? 20 : 30
+                height: ScreenTools.isMobile ? 20 : 30
+                radius: width / 2   // Make it circular
                 color: {
                     // Change color based on max temperature
                     var maxTemp = escTemperatureArea.getMaxTemperature();
@@ -139,10 +143,13 @@ Rectangle {
             }
 
             QGCLabel {
-                text: qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
+                text: ScreenTools.isMobile ? qsTr("Motor Temp:\n%1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
+                                                       : qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
                 font.bold: true
+                font.pixelSize: ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 1.6 : ScreenTools.defaultFontPixelWidth * 2
                 color: qgcPal.text
                 horizontalAlignment: Text.AlignHCenter
+                wrapMode: ScreenTools.isMobile ? Text.WordWrap : Text.NoWrap
             }
         }
     }
