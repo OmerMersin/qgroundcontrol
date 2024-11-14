@@ -304,8 +304,15 @@ FlightMap {
             map:            _root
             size:           pipMode ? ScreenTools.defaultFontPixelHeight : ScreenTools.defaultFontPixelHeight * 3
             z:              QGroundControl.zOrderVehicles
-        }
-    }
+            // Set the custom icon for the ground station or user location
+                    Image {
+                        source: "/qmlimages/Dronetools/CustomLocationIcon.png"  // Path to your custom icon
+                        width: 32
+                        height: 32
+                        anchors.centerIn: parent
+                    }
+                }
+            }
     // Add distance sensor view
     MapItemView{
         model: QGroundControl.multiVehicleManager.vehicles

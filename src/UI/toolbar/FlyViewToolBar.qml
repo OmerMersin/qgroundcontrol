@@ -90,7 +90,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
+        anchors.right:          escTemperatureArea.left
         contentWidth:           toolIndicators.width
         flickableDirection:     Flickable.HorizontalFlick
         // enabled:                true
@@ -100,34 +100,53 @@ Rectangle {
 
     Rectangle {
         id: escTemperatureArea
-        width: ScreenTools.defaultFontPixelWidth * 24
+        width: ScreenTools.defaultFontPixelWidth * 18
         height: parent.height
-        color: "blue"
-        anchors.left:           viewButtonRow.right
-        anchors.bottom:         parent.bottom
+        color: "transparents"
+        anchors.right: brandingImage.left
+        anchors.bottom: parent.bottom
+        visible:_activeVehicle
+
+        function getMaxTemperature() {
+            const temperatures = [
+                _activeVehicle.escStatus.temperature1.rawValue,
+                _activeVehicle.escStatus.temperature2.rawValue,
+                _activeVehicle.escStatus.temperature3.rawValue,
+                _activeVehicle.escStatus.temperature4.rawValue
+            ];
+            return Math.max(...temperatures);
+        }
 
         RowLayout {
             anchors.centerIn: parent
 
+            // Temperature indicator dot
+            Rectangle {
+                width: 30
+                height: 30
+                radius: 15   // Make it circular
+                color: {
+                    // Change color based on max temperature
+                    var maxTemp = escTemperatureArea.getMaxTemperature();
+                    if (maxTemp >= 33) {
+                        return qgcPal.colorRed;     // High temperature
+                    } else if (maxTemp >= 30) {
+                        return qgcPal.colorOrange;  // Moderate temperature
+                    } else {
+                        return qgcPal.colorGreen;   // Safe temperature
+                    }
+                }
+            }
+
             QGCLabel {
-                text: qsTr("ESC Temps")
+                text: qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
                 font.bold: true
                 color: qgcPal.text
                 horizontalAlignment: Text.AlignHCenter
             }
-
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.escs : 0
-                QGCLabel {
-                    text: qsTr("ESC %1: %2°C").arg(index + 1).arg(modelData.temperature ? modelData.temperature.toFixed(1) : "No Data")
-                    color: modelData.temperature > 80 ? qgcPal.colorRed : qgcPal.text  // Red if temp > 80°C
-                    font.pointSize: ScreenTools.smallFontPointSize
-                }
-                onItemAdded: console.log("Added ESC temp item for index:", index, "Temperature:", modelData.temperature)
-            }
-
         }
     }
+
 
 
 
@@ -136,6 +155,7 @@ Rectangle {
     //-------------------------------------------------------------------------
     //-- Branding Logo
     Image {
+        id:                     brandingImage
         anchors.right:          parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom

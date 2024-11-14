@@ -666,6 +666,27 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _handleMessageInterval(message);
         break;
     }
+    case MAVLINK_MSG_ID_ESC_TELEMETRY_1_TO_4: {
+        // Debug message to verify case entry
+        qDebug() << "Processing ESC Telemetry";
+
+        // Decode the message
+        mavlink_esc_telemetry_1_to_4_t escTelemetry;
+        mavlink_msg_esc_telemetry_1_to_4_decode(&message, &escTelemetry);
+
+        // Log each ESC temperature value for debugging
+        qDebug() << "ESC Temperature 1:" << static_cast<int>(escTelemetry.temperature[0]);
+        qDebug() << "ESC Temperature 2:" << static_cast<int>(escTelemetry.temperature[1]);
+        qDebug() << "ESC Temperature 3:" << static_cast<int>(escTelemetry.temperature[2]);
+        qDebug() << "ESC Temperature 4:" << static_cast<int>(escTelemetry.temperature[3]);
+
+        // Update the VehicleEscStatusFactGroup with ESC telemetry values
+        _escStatusFactGroup.temperature1()->setRawValue(static_cast<float>(escTelemetry.temperature[0]));
+        _escStatusFactGroup.temperature2()->setRawValue(static_cast<float>(escTelemetry.temperature[1]));
+        _escStatusFactGroup.temperature3()->setRawValue(static_cast<float>(escTelemetry.temperature[2]));
+        _escStatusFactGroup.temperature4()->setRawValue(static_cast<float>(escTelemetry.temperature[3]));
+        break;
+    }
     }
 
     // This must be emitted after the vehicle processes the message. This way the vehicle state is up to date when anyone else

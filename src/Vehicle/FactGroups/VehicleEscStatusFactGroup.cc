@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 #include "VehicleEscStatusFactGroup.h"
 #include "Vehicle.h"
 
@@ -28,6 +19,11 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     , _voltageSecondFact                (0, _voltageSecondFactName,                 FactMetaData::valueTypeFloat)
     , _voltageThirdFact                 (0, _voltageThirdFactName,                  FactMetaData::valueTypeFloat)
     , _voltageFourthFact                (0, _voltageFourthFactName,                 FactMetaData::valueTypeFloat)
+
+    , _temperature1Fact                 (0, _temperature1FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature2Fact                 (0, _temperature2FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature3Fact                 (0, _temperature3FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature4Fact                 (0, _temperature4FactName,                  FactMetaData::valueTypeFloat)
 {
     _addFact(&_indexFact,                       _indexFactName);
 
@@ -45,6 +41,11 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     _addFact(&_voltageSecondFact,               _voltageSecondFactName);
     _addFact(&_voltageThirdFact,                _voltageThirdFactName);
     _addFact(&_voltageFourthFact,               _voltageFourthFactName);
+
+    _addFact(&_temperature1Fact,                _temperature1FactName);
+    _addFact(&_temperature2Fact,                _temperature2FactName);
+    _addFact(&_temperature3Fact,                _temperature3FactName);
+    _addFact(&_temperature4Fact,                _temperature4FactName);
 }
 
 void VehicleEscStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
@@ -56,20 +57,26 @@ void VehicleEscStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_me
     mavlink_esc_status_t content;
     mavlink_msg_esc_status_decode(&message, &content);
 
-    index()->setRawValue                        (content.index);
+    // Update facts with received data
+    _indexFact.setRawValue                        (content.index);
 
-    rpmFirst()->setRawValue                     (content.rpm[0]);
-    rpmSecond()->setRawValue                    (content.rpm[1]);
-    rpmThird()->setRawValue                     (content.rpm[2]);
-    rpmFourth()->setRawValue                    (content.rpm[3]);
+    _rpmFirstFact.setRawValue                     (content.rpm[0]);
+    _rpmSecondFact.setRawValue                    (content.rpm[1]);
+    _rpmThirdFact.setRawValue                     (content.rpm[2]);
+    _rpmFourthFact.setRawValue                    (content.rpm[3]);
 
-    currentFirst()->setRawValue                 (content.current[0]);
-    currentSecond()->setRawValue                (content.current[1]);
-    currentThird()->setRawValue                 (content.current[2]);
-    currentFourth()->setRawValue                (content.current[3]);
+    _currentFirstFact.setRawValue                 (content.current[0]);
+    _currentSecondFact.setRawValue                (content.current[1]);
+    _currentThirdFact.setRawValue                 (content.current[2]);
+    _currentFourthFact.setRawValue                (content.current[3]);
 
-    voltageFirst()->setRawValue                 (content.voltage[0]);
-    voltageSecond()->setRawValue                (content.voltage[1]);
-    voltageThird()->setRawValue                 (content.voltage[2]);
-    voltageFourth()->setRawValue                (content.voltage[3]);
+    _voltageFirstFact.setRawValue                 (content.voltage[0]);
+    _voltageSecondFact.setRawValue                (content.voltage[1]);
+    _voltageThirdFact.setRawValue                 (content.voltage[2]);
+    _voltageFourthFact.setRawValue                (content.voltage[3]);
+
+    _temperature1Fact.setRawValue                 (content.temperature[0]);
+    _temperature2Fact.setRawValue                 (content.temperature[1]);
+    _temperature3Fact.setRawValue                 (content.temperature[2]);
+    _temperature4Fact.setRawValue                 (content.temperature[3]);
 }

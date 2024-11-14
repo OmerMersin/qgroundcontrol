@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 #pragma once
 
 #include "FactGroup.h"
@@ -38,6 +29,11 @@ public:
     Q_PROPERTY(Fact* voltageThird       READ voltageThird       CONSTANT)
     Q_PROPERTY(Fact* voltageFourth      READ voltageFourth      CONSTANT)
 
+    Q_PROPERTY(Fact* temperature1       READ temperature1       CONSTANT)
+    Q_PROPERTY(Fact* temperature2       READ temperature2       CONSTANT)
+    Q_PROPERTY(Fact* temperature3       READ temperature3       CONSTANT)
+    Q_PROPERTY(Fact* temperature4       READ temperature4       CONSTANT)
+
     Fact* index                         () { return &_indexFact; }
 
     Fact* rpmFirst                      () { return &_rpmFirstFact; }
@@ -55,26 +51,36 @@ public:
     Fact* voltageThird                  () { return &_voltageThirdFact; }
     Fact* voltageFourth                 () { return &_voltageFourthFact; }
 
+    Fact* temperature1                  () { return &_temperature1Fact; }
+    Fact* temperature2                  () { return &_temperature2Fact; }
+    Fact* temperature3                  () { return &_temperature3Fact; }
+    Fact* temperature4                  () { return &_temperature4Fact; }
+
     // Overrides from FactGroup
     void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
 
 private:
-    const QString _indexFactName =                            QStringLiteral("index");
+    const QString _indexFactName =          QStringLiteral("index");
 
-    const QString _rpmFirstFactName =                         QStringLiteral("rpm1");
-    const QString _rpmSecondFactName =                        QStringLiteral("rpm2");
-    const QString _rpmThirdFactName =                         QStringLiteral("rpm3");
-    const QString _rpmFourthFactName =                        QStringLiteral("rpm4");
+    const QString _rpmFirstFactName =       QStringLiteral("rpm1");
+    const QString _rpmSecondFactName =      QStringLiteral("rpm2");
+    const QString _rpmThirdFactName =       QStringLiteral("rpm3");
+    const QString _rpmFourthFactName =      QStringLiteral("rpm4");
 
-    const QString _currentFirstFactName =                     QStringLiteral("current1");
-    const QString _currentSecondFactName =                    QStringLiteral("current2");
-    const QString _currentThirdFactName =                     QStringLiteral("current3");
-    const QString _currentFourthFactName =                    QStringLiteral("current4");
+    const QString _currentFirstFactName =   QStringLiteral("current1");
+    const QString _currentSecondFactName =  QStringLiteral("current2");
+    const QString _currentThirdFactName =   QStringLiteral("current3");
+    const QString _currentFourthFactName =  QStringLiteral("current4");
 
-    const QString _voltageFirstFactName =                     QStringLiteral("voltage1");
-    const QString _voltageSecondFactName =                    QStringLiteral("voltage2");
-    const QString _voltageThirdFactName =                     QStringLiteral("voltage3");
-    const QString _voltageFourthFactName =                    QStringLiteral("voltage4");
+    const QString _voltageFirstFactName =   QStringLiteral("voltage1");
+    const QString _voltageSecondFactName =  QStringLiteral("voltage2");
+    const QString _voltageThirdFactName =   QStringLiteral("voltage3");
+    const QString _voltageFourthFactName =  QStringLiteral("voltage4");
+
+    const QString _temperature1FactName =   QStringLiteral("temperature1");
+    const QString _temperature2FactName =   QStringLiteral("temperature2");
+    const QString _temperature3FactName =   QStringLiteral("temperature3");
+    const QString _temperature4FactName =   QStringLiteral("temperature4");
 
     Fact _indexFact;
 
@@ -92,4 +98,9 @@ private:
     Fact _voltageSecondFact;
     Fact _voltageThirdFact;
     Fact _voltageFourthFact;
+
+    Fact _temperature1Fact;
+    Fact _temperature2Fact;
+    Fact _temperature3Fact;
+    Fact _temperature4Fact;
 };
