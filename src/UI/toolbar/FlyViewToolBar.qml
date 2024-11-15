@@ -99,16 +99,16 @@ Rectangle {
     }
 
     Rectangle {
-        id: escTemperatureArea
-        height: parent.height
-        color: "transparent"
-        anchors.right: brandingImage.left
-        anchors.bottom: parent.bottom
-        anchors.rightMargin:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:_activeVehicle
+        id:                     escTemperatureArea
+        height:                 parent.height
+        color:                  "transparent"
+        anchors.right:          brandingImage.left
+        anchors.bottom:         parent.bottom
+        anchors.rightMargin:    ScreenTools.defaultFontPixelHeight * 0.66
+        visible:                escTemperatureArea.getMaxTemperature() <= 0 ? false:true
 
         // Dynamically adjust width and height based on content
-            implicitWidth: rowContent.implicitWidth
+            implicitWidth:      rowContent.implicitWidth
 
         function getMaxTemperature() {
             const temperatures = [
@@ -122,34 +122,36 @@ Rectangle {
 
         RowLayout {
             id: rowContent
-            anchors.centerIn: parent
+            anchors.centerIn:   parent
 
             // Temperature indicator dot
             Rectangle {
-                width: ScreenTools.isMobile ? 20 : 30
-                height: ScreenTools.isMobile ? 20 : 30
-                radius: width / 2   // Make it circular
+                width:          ScreenTools.isMobile ? 20 : 30
+                height:         ScreenTools.isMobile ? 20 : 30
+                radius:         width / 2   // Make it circular
                 color: {
                     // Change color based on max temperature
                     var maxTemp = escTemperatureArea.getMaxTemperature();
-                    if (maxTemp >= 33) {
+                    if (maxTemp < 10) {
                         return qgcPal.colorRed;     // High temperature
-                    } else if (maxTemp >= 30) {
+                    } else if (maxTemp <= 80) {
+                        return qgcPal.colorGreen;  // Moderate temperature
+                    } else if (maxTemp <= 95) {
                         return qgcPal.colorOrange;  // Moderate temperature
                     } else {
-                        return qgcPal.colorGreen;   // Safe temperature
+                        return qgcPal.colorRed;   // Safe temperature
                     }
                 }
             }
 
             QGCLabel {
-                text: ScreenTools.isMobile ? qsTr("Motor Temp:\n%1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
+                text:                   ScreenTools.isMobile ? qsTr("Motor Temp:\n%1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
                                                        : qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
-                font.bold: true
-                font.pixelSize: ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 1.6 : ScreenTools.defaultFontPixelWidth * 2
-                color: qgcPal.text
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: ScreenTools.isMobile ? Text.WordWrap : Text.NoWrap
+                font.bold:              false
+                font.pixelSize:         ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 1.6 : ScreenTools.defaultFontPixelWidth * 2
+                color:                  qgcPal.text
+                horizontalAlignment:    Text.AlignHCenter
+                wrapMode:               ScreenTools.isMobile ? Text.WordWrap : Text.NoWrap
             }
         }
     }
