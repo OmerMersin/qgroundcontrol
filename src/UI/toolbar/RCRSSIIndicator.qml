@@ -20,14 +20,23 @@ import QGroundControl.Palette
 //-- RC RSSI Indicator
 Item {
     id:             _root
-    width:          rssiRow.width * 1.1
+    width:          rssiRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
     property bool showIndicator: _activeVehicle.supportsRadio && _rcRSSIAvailable
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
+    property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI >= 0 && _activeVehicle.rcRSSI <= 100 : false
+
+    function normalizeRSSI(value) {
+        if (value < 0) {
+            value = 0; // Clamp to minimum
+        } else if (value > 50) {
+            value = 50; // Clamp to maximum
+        }
+        return value * 2;
+    }
 
     Component {
         id: rcRSSIInfo
@@ -48,7 +57,7 @@ Item {
 
                 QGCLabel {
                     id:             rssiLabel
-                    text:           _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
+                    text:           _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("Gas Status") : qsTr("Gas Data Unavailable")) : qsTr("N/A", "No data available")
                     font.bold:      true
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -61,8 +70,8 @@ Item {
                     columns:            2
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0 }
+                    QGCLabel { text: qsTr("Gas:") }
+                    QGCLabel { text: _activeVehicle ? (normalizeRSSI(_activeVehicle.rcRSSI) + "%") : 0 }
                 }
             }
         }
@@ -79,16 +88,16 @@ Item {
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             sourceSize.height:  height
-            source:             "/qmlimages/RC.svg"
+            source:             "/InstrumentValueIcons/location-gas-station.svg"
             fillMode:           Image.PreserveAspectFit
             opacity:            _rcRSSIAvailable ? 1 : 0.5
             color:              qgcPal.buttonText
         }
 
-        SignalStrength {
-            anchors.verticalCenter: parent.verticalCenter
-            size:                   parent.height * 0.5
-            percent:                _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
+        QGCLabel {
+            id:                         gasPercentage
+            text:                       _rcRSSIAvailable ? normalizeRSSI(_activeVehicle.rcRSSI) + "%" : 0
+            anchors.verticalCenter:     parent.verticalCenter
         }
     }
 

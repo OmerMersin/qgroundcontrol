@@ -47,6 +47,8 @@ Item {
     property bool threshold1visible: batterySettings.threshold1visible.rawValue
     property bool threshold2visible: batterySettings.threshold2visible.rawValue
 
+    property int batteryPercentage: 0
+
     Row {
         id:             batteryIndicatorRow
         anchors.top:    parent.top
@@ -224,7 +226,7 @@ Item {
                     } else {
                         percentage = 0
                     }
-
+                    batteryPercentage = Math.round(percentage)
                     return `${Math.round(percentage)}%`
                 }
                 return qsTr("n/a")
@@ -344,7 +346,7 @@ Item {
 
                     LabelledLabel {
                         label:      qsTr("Remaining")
-                        labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
+                        labelText:  batteryPercentage + " " + object.percentRemaining.units
                         visible:    batteryValuesAvailable.percentRemainingAvailable
                     }
 

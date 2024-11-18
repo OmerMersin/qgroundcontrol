@@ -100,7 +100,6 @@ Rectangle {
 
     Rectangle {
         id:                     escTemperatureArea
-        height:                 parent.height
         color:                  "transparent"
         anchors.right:          brandingImage.left
         anchors.bottom:         parent.bottom
@@ -108,7 +107,12 @@ Rectangle {
         visible:                escTemperatureArea.getMaxTemperature() <= 0 ? false:true
 
         // Dynamically adjust width and height based on content
-            implicitWidth:      rowContent.implicitWidth
+        implicitWidth:      rowContent.implicitWidth
+
+        // Adjust width and height dynamically based on visibility
+        width:                  visible ? implicitWidth : 0
+        height:                 visible ? parent.height : 0
+
 
         function getMaxTemperature() {
             const temperatures = [

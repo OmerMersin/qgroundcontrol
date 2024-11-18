@@ -36,7 +36,6 @@ ApplicationWindow {
 
     property bool   enableAdministratorMode:   false
 
-
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
         if (!ScreenTools.isFakeMobile && (ScreenTools.isMobile || Screen.height / ScreenTools.realPixelDensity < 120)) {
