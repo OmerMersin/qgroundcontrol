@@ -113,16 +113,16 @@ Rectangle {
         width:                  visible ? implicitWidth : 0
         height:                 visible ? parent.height : 0
 
-
         function getMaxTemperature() {
             const temperatures = [
-                _activeVehicle.escStatus.temperature1.rawValue,
-                _activeVehicle.escStatus.temperature2.rawValue,
-                _activeVehicle.escStatus.temperature3.rawValue,
-                _activeVehicle.escStatus.temperature4.rawValue
+                _activeVehicle?.escStatus?.temperature1?.rawValue ?? 0,
+                _activeVehicle?.escStatus?.temperature2?.rawValue ?? 0,
+                _activeVehicle?.escStatus?.temperature3?.rawValue ?? 0,
+                _activeVehicle?.escStatus?.temperature4?.rawValue ?? 0
             ];
             return Math.max(...temperatures);
         }
+
 
         RowLayout {
             id: rowContent
