@@ -75,8 +75,8 @@ void VehicleEscStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_me
     _voltageThirdFact.setRawValue                 (content.voltage[2]);
     _voltageFourthFact.setRawValue                (content.voltage[3]);
 
-    _temperature1Fact.setRawValue                 (content.temperature[0]);
-    _temperature2Fact.setRawValue                 (content.temperature[1]);
-    _temperature3Fact.setRawValue                 (content.temperature[2]);
-    _temperature4Fact.setRawValue                 (content.temperature[3]);
+    // _temperature1Fact.setRawValue                 (content.temperature[0]);
+    // _temperature2Fact.setRawValue                 (content.temperature[1]);
+    // _temperature3Fact.setRawValue                 (content.temperature[2]);
+    // _temperature4Fact.setRawValue                 (content.temperature[3]);
 }
