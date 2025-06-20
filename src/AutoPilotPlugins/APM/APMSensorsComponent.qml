@@ -724,7 +724,7 @@ SetupPage {
                     QGCButton {
                         width:      _buttonWidth
                         text:       _calibratePressureText
-                        visible:        advancedModeSetup
+                        // visible:        advancedModeSetup
                         onClicked:  mainWindow.showMessageDialog(_calibratePressureText,
                                                                  qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
                                                                  Dialog.Cancel | Dialog.Ok,
