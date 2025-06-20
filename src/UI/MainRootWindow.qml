@@ -702,7 +702,8 @@ ApplicationWindow {
     Popup {
         id:             indicatorDrawer
         x:              calcXPosition()
-        y:              ScreenTools.toolbarHeight + _margins
+        y:              _margins // ScreenTools.toolbarHeight +
+        bottomMargin:   ScreenTools.toolbarHeight
         leftInset:      0
         rightInset:     0
         topInset:       0
@@ -749,7 +750,7 @@ ApplicationWindow {
 
             Rectangle {
                 anchors.horizontalCenter:   backgroundRect.right
-                anchors.verticalCenter:     backgroundRect.top
+                anchors.verticalCenter:     backgroundRect.bottom
                 width:                      ScreenTools.defaultFontPixelHeight
                 height:                     width
                 radius:                     width / 2
