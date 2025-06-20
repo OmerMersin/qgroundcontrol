@@ -397,6 +397,7 @@ FlightMap {
     // Camera trigger points
     MapItemView {
         model: _activeVehicle ? _activeVehicle.cameraTriggerPoints : 0
+        visible: false
 
         delegate: CameraTriggerIndicator {
             coordinate:     object.coordinate
@@ -797,8 +798,10 @@ FlightMap {
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
+        // anchors.left:       parent.left
+        // anchors.top:        parent.top
+        anchors.right:       parent.right
+        anchors.bottom:      parent.bottom
         mapControl:         _root
         buttonsOnLeft:      true
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState

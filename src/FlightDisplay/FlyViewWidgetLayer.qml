@@ -247,7 +247,7 @@ Item {
         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left:           parent.left
-        anchors.top:            mapScale.bottom
+        anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
         visible:                !QGroundControl.videoManager.fullScreen
@@ -272,8 +272,8 @@ Item {
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
+        anchors.right:       parent.right
+        anchors.bottom:      parent.bottom
         mapControl:         _mapControl
         buttonsOnLeft:      true
         // visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
