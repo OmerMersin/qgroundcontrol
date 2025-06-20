@@ -61,9 +61,10 @@
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>
         <file alias="qgroundcontrol.ico">resources/icons/qgroundcontrol.ico</file>
         <file alias="DronetoolsLogoFull">resources/DronetoolsLogoFull.svg</file>
-		<file alias="DronetoolsLightLogo">resources/DronetoolsLightLogo.svg</file>
-		<file alias="dronetools.ico">resources/icons/dronetools.ico</file>
-
+        <file alias="DronetoolsLightLogo">resources/DronetoolsLightLogo.svg</file>
+        <file alias="dronetools.ico">resources/icons/dronetools.ico</file>
+        <file alias="advanced">resources/advanced.png</file>
+        <file alias="advanced-svg">resources/advanced-svg.svg</file>
     </qresource>
     <qresource prefix="/res/firmware">
         <file alias="3drradio.png">resources/firmware/3drradio.png</file>

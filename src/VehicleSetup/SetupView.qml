@@ -325,6 +325,7 @@ Rectangle {
 
             SubMenuButton {
                 id:                 advancedMode
+                imageResource:      "/res/advanced-svg"
                 setupIndicator:     false
                 buttonGroup:        setupButtonGroup
                 visible:            !advancedModeSetup
