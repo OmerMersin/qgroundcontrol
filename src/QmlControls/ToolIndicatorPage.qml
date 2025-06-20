@@ -26,7 +26,7 @@ RowLayout {
     property Component  expandedComponent           // Item for the expanded portion of the page
     property var        pageProperties              // Allows you to share a QtObject full of properties between pages
 
-    // These properties are bound by the MainRoowWindow loader
+    // These properties are bound by the MainRootWindow loader
     property bool expanded: false
     property var  drawer
 
