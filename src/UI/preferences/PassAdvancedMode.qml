@@ -63,17 +63,25 @@ Rectangle {
 
                             QGCLabel { text: "Password" }
 
-
                             QGCTextField {
                                 id:                     passwordField
                                 Layout.preferredWidth:  _secondColumnWidth
                                 Layout.fillWidth:       true
                                 echoMode:               TextInput.Password
                                 placeholderText:        "**********"
+
+                                // Add key event handling
+                                Keys.onPressed: function(event) {
+                                    if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                        // Check if password is not empty (same condition as the button's enabled state)
+                                        if (passwordField.text !== "") {
+                                            validatePassword()
+                                            event.accepted = true
+                                        }
+                                    }
+                                }
                             }
-
                         }
-
                     }
                 }
 
@@ -87,22 +95,24 @@ Rectangle {
                         enabled:    passwordField.text !== ""
 
                         onClicked: {
-                            if(passwordField.text === advancedModePass){
-                                if(typeof(settingsView) !== "undefined"){
-                                    settingsView.showAdvancedSettings = true
-
-                                }
-
-                                if(typeof(setupView) !== "undefined"){
-                                    setupView.advancedModeSetup = true
-                                }
-                            }else{
-                                passwordField.text = ""                            }
+                            validatePassword()
                         }
                     }
                 }
             }
         }
     }
+    function validatePassword() {
+        if(passwordField.text === advancedModePass) {
+            if(typeof(settingsView) !== "undefined") {
+                mainWindow.enableAdministratorMode = true
+            }
 
+            if(typeof(setupView) !== "undefined") {
+                mainWindow.enableAdministratorMode = true
+            }
+        } else {
+            passwordField.text = ""
+        }
+    }
 }
