@@ -201,15 +201,15 @@ if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/resources.qrc")
             BATCHABLE
         )
 
-        if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag")
-            file(COPY_FILE "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb" "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external")
-            qt6_add_shaders(gstqml6gl "gstqml6gl_shaders1"
-                PREFIX "/org/freedesktop/gstreamer/qml6"
-                OUTPUT_TARGETS gstqml6gl_shaders1
-                FILES "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external@glsl,100es,${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag"
-                OUTPUTS "RGBA.frag.qsb.external"
-            )
-        endif()
+        # if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag")
+        #     file(COPY_FILE "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb" "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external")
+        #     qt6_add_shaders(gstqml6gl "gstqml6gl_shaders1"
+        #         PREFIX "/org/freedesktop/gstreamer/qml6"
+        #         OUTPUT_TARGETS gstqml6gl_shaders1
+        #         FILES "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external@glsl,100es,${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag"
+        #         OUTPUTS "RGBA.frag.qsb.external"
+        #     )
+        # endif()
     endif()
 endif()
 
