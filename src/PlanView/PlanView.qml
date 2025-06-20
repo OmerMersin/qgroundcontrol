@@ -329,14 +329,17 @@ Item {
     PlanViewToolBar {
         id:                     planToolBar
         planMasterController:   _planMasterController
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        anchors.right:  parent.right
     }
 
     Item {
         id:             panel
         anchors.left:   parent.left
         anchors.right:  parent.right
-        anchors.top:    planToolBar.bottom
-        anchors.bottom: parent.bottom
+        anchors.top:    parent.top
+        anchors.bottom: planToolBar.top
 
         FlightMap {
             id:                         editorMap
@@ -552,6 +555,7 @@ Item {
             anchors.margins:    _toolsMargin
             anchors.left:       parent.left
             anchors.top:        parent.top
+            anchors.bottom:     planToolBar.top
             z:                  QGroundControl.zOrderWidgets
             maxHeight:          parent.height - toolStrip.y
             title:              qsTr("Plan")
