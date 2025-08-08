@@ -98,67 +98,67 @@ Rectangle {
         FlyViewToolBarIndicators { id: toolIndicators }
     }
 
-    Rectangle {
-        id:                     escTemperatureArea
-        color:                  "transparent"
-        anchors.right:          brandingImage.left
-        anchors.bottom:         parent.bottom
-        anchors.rightMargin:    ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                escTemperatureArea.getMaxTemperature() <= 0 ? false:true
+    // Rectangle {
+    //     id:                     escTemperatureArea
+    //     color:                  "transparent"
+    //     anchors.right:          brandingImage.left
+    //     anchors.bottom:         parent.bottom
+    //     anchors.rightMargin:    ScreenTools.defaultFontPixelHeight * 0.66
+    //     visible:                escTemperatureArea.getMaxTemperature() <= 0 ? false:true
 
-        // Dynamically adjust width and height based on content
-        implicitWidth:      rowContent.implicitWidth
+    //     // Dynamically adjust width and height based on content
+    //     implicitWidth:      rowContent.implicitWidth
 
-        // Adjust width and height dynamically based on visibility
-        width:                  visible ? implicitWidth : 0
-        height:                 visible ? parent.height : 0
+    //     // Adjust width and height dynamically based on visibility
+    //     width:                  visible ? implicitWidth : 0
+    //     height:                 visible ? parent.height : 0
 
-        function getMaxTemperature() {
-            const temperatures = [
-                _activeVehicle?.escStatus?.temperature1?.rawValue ?? 0,
-                _activeVehicle?.escStatus?.temperature2?.rawValue ?? 0,
-                _activeVehicle?.escStatus?.temperature3?.rawValue ?? 0,
-                _activeVehicle?.escStatus?.temperature4?.rawValue ?? 0
-            ];
-            return Math.max(...temperatures);
-        }
+    //     function getMaxTemperature() {
+    //         const temperatures = [
+    //             _activeVehicle?.escStatus?.temperature1?.rawValue ?? 0,
+    //             _activeVehicle?.escStatus?.temperature2?.rawValue ?? 0,
+    //             _activeVehicle?.escStatus?.temperature3?.rawValue ?? 0,
+    //             _activeVehicle?.escStatus?.temperature4?.rawValue ?? 0
+    //         ];
+    //         return Math.max(...temperatures);
+    //     }
 
 
-        RowLayout {
-            id: rowContent
-            anchors.centerIn:   parent
+    //     RowLayout {
+    //         id: rowContent
+    //         anchors.centerIn:   parent
 
-            // Temperature indicator dot
-            Rectangle {
-                width:          ScreenTools.isMobile ? 20 : 30
-                height:         ScreenTools.isMobile ? 20 : 30
-                radius:         width / 2   // Make it circular
-                color: {
-                    // Change color based on max temperature
-                    var maxTemp = escTemperatureArea.getMaxTemperature();
-                    if (maxTemp < 10) {
-                        return qgcPal.colorRed;     // High temperature
-                    } else if (maxTemp <= 80) {
-                        return qgcPal.colorGreen;  // Moderate temperature
-                    } else if (maxTemp <= 95) {
-                        return qgcPal.colorOrange;  // Moderate temperature
-                    } else {
-                        return qgcPal.colorRed;   // Safe temperature
-                    }
-                }
-            }
+    //         // Temperature indicator dot
+    //         Rectangle {
+    //             width:          ScreenTools.isMobile ? 20 : 30
+    //             height:         ScreenTools.isMobile ? 20 : 30
+    //             radius:         width / 2   // Make it circular
+    //             color: {
+    //                 // Change color based on max temperature
+    //                 var maxTemp = escTemperatureArea.getMaxTemperature();
+    //                 if (maxTemp < 10) {
+    //                     return qgcPal.colorRed;     // High temperature
+    //                 } else if (maxTemp <= 80) {
+    //                     return qgcPal.colorGreen;  // Moderate temperature
+    //                 } else if (maxTemp <= 95) {
+    //                     return qgcPal.colorOrange;  // Moderate temperature
+    //                 } else {
+    //                     return qgcPal.colorRed;   // Safe temperature
+    //                 }
+    //             }
+    //         }
 
-            QGCLabel {
-                text:                   ScreenTools.isMobile ? qsTr("Motor Temp:\n%1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
-                                                       : qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
-                font.bold:              false
-                font.pixelSize:         ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 1.6 : ScreenTools.defaultFontPixelWidth * 2
-                color:                  qgcPal.text
-                horizontalAlignment:    Text.AlignHCenter
-                wrapMode:               ScreenTools.isMobile ? Text.WordWrap : Text.NoWrap
-            }
-        }
-    }
+    //         QGCLabel {
+    //             text:                   ScreenTools.isMobile ? qsTr("Motor Temp:\n%1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
+    //                                                    : qsTr("Motor Temp: %1°C").arg(escTemperatureArea.getMaxTemperature().toFixed(1))
+    //             font.bold:              false
+    //             font.pixelSize:         ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 1.6 : ScreenTools.defaultFontPixelWidth * 2
+    //             color:                  qgcPal.text
+    //             horizontalAlignment:    Text.AlignHCenter
+    //             wrapMode:               ScreenTools.isMobile ? Text.WordWrap : Text.NoWrap
+    //         }
+    //     }
+    // }
 
 
 
