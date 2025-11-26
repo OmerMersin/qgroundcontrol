@@ -47,7 +47,7 @@ Rectangle {
 
     Rectangle {
         anchors.fill: viewButtonRow
-        
+
         gradient: Gradient {
             orientation: Gradient.Horizontal
             GradientStop { position: 0;                                     color: _mainStatusBGColor }
@@ -90,7 +90,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          escTemperatureArea.left
+        anchors.right:          brandingImage.left
         contentWidth:           toolIndicators.width
         flickableDirection:     Flickable.HorizontalFlick
         // enabled:                true
