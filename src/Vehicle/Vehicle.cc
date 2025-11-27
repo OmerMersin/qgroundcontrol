@@ -681,10 +681,10 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         qDebug() << "ESC Temperature 4:" << static_cast<int>(escTelemetry.temperature[3]);
 
         // Update the VehicleEscStatusFactGroup with ESC telemetry values
-        // _escStatusFactGroup.temperature1()->setRawValue(static_cast<float>(escTelemetry.temperature[0]));
-        // _escStatusFactGroup.temperature2()->setRawValue(static_cast<float>(escTelemetry.temperature[1]));
-        // _escStatusFactGroup.temperature3()->setRawValue(static_cast<float>(escTelemetry.temperature[2]));
-        // _escStatusFactGroup.temperature4()->setRawValue(static_cast<float>(escTelemetry.temperature[3]));
+        _escStatusFactGroup.temperature1()->setRawValue(static_cast<float>(escTelemetry.temperature[0]));
+        _escStatusFactGroup.temperature2()->setRawValue(static_cast<float>(escTelemetry.temperature[1]));
+        _escStatusFactGroup.temperature3()->setRawValue(static_cast<float>(escTelemetry.temperature[2]));
+        _escStatusFactGroup.temperature4()->setRawValue(static_cast<float>(escTelemetry.temperature[3]));
         break;
     }
     }

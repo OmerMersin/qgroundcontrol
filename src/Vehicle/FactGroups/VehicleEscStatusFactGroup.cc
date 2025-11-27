@@ -20,10 +20,10 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     , _voltageThirdFact                 (0, _voltageThirdFactName,                  FactMetaData::valueTypeFloat)
     , _voltageFourthFact                (0, _voltageFourthFactName,                 FactMetaData::valueTypeFloat)
 
-    // , _temperature1Fact                 (0, _temperature1FactName,                  FactMetaData::valueTypeFloat)
-    // , _temperature2Fact                 (0, _temperature2FactName,                  FactMetaData::valueTypeFloat)
-    // , _temperature3Fact                 (0, _temperature3FactName,                  FactMetaData::valueTypeFloat)
-    // , _temperature4Fact                 (0, _temperature4FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature1Fact                 (0, _temperature1FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature2Fact                 (0, _temperature2FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature3Fact                 (0, _temperature3FactName,                  FactMetaData::valueTypeFloat)
+    , _temperature4Fact                 (0, _temperature4FactName,                  FactMetaData::valueTypeFloat)
 {
     _addFact(&_indexFact,                       _indexFactName);
 
@@ -42,10 +42,10 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     _addFact(&_voltageThirdFact,                _voltageThirdFactName);
     _addFact(&_voltageFourthFact,               _voltageFourthFactName);
 
-    // _addFact(&_temperature1Fact,                _temperature1FactName);
-    // _addFact(&_temperature2Fact,                _temperature2FactName);
-    // _addFact(&_temperature3Fact,                _temperature3FactName);
-    // _addFact(&_temperature4Fact,                _temperature4FactName);
+    _addFact(&_temperature1Fact,                _temperature1FactName);
+    _addFact(&_temperature2Fact,                _temperature2FactName);
+    _addFact(&_temperature3Fact,                _temperature3FactName);
+    _addFact(&_temperature4Fact,                _temperature4FactName);
 }
 
 void VehicleEscStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
