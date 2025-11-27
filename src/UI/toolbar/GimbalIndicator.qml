@@ -26,7 +26,7 @@ Item {
 
     property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
     property var    gimbalController:       activeVehicle.gimbalController
-    property bool   showIndicator:          gimbalController && gimbalController.gimbals.count
+    property bool   showIndicator:          false // gimbalController && gimbalController.gimbals.count
     property var    activeGimbal:           gimbalController.activeGimbal
     property var    multiGimbalSetup:       gimbalController.gimbals.count > 1
 
