@@ -173,7 +173,16 @@ void TerrainAtCoordinateBatchManager::_coordinateHeights(bool success, const QLi
 
         qCDebug(TerrainQueryVerboseLog) << Q_FUNC_INFO << "returned TerrainCoordinateQuery:count" << sentRequestInfo.terrainAtCoordinateQuery << sentRequestInfo.cCoord;
         (void) disconnect(sentRequestInfo.terrainAtCoordinateQuery, &TerrainAtCoordinateQuery::destroyed, this, &TerrainAtCoordinateBatchManager::_queryObjectDestroyed);
-        const QList<double> requestAltitudes = heights.mid(currentIndex, sentRequestInfo.cCoord);
+        int batchSize = sentRequestInfo.cCoord;
+        int remaining = heights.count() - currentIndex;
+
+        if (remaining < batchSize) {
+            qWarning() << "Terrain batch truncated: expected" << batchSize << "but remaining" << remaining;
+            batchSize = qMax(remaining, 0);
+        }
+
+        const QList<double> requestAltitudes =
+            batchSize > 0 ? heights.mid(currentIndex, batchSize) : QList<double>();
         sentRequestInfo.terrainAtCoordinateQuery->signalTerrainData(true, requestAltitudes);
         currentIndex += sentRequestInfo.cCoord;
     }
