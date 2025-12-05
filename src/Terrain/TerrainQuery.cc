@@ -184,7 +184,8 @@ void TerrainAtCoordinateBatchManager::_coordinateHeights(bool success, const QLi
         const QList<double> requestAltitudes =
             batchSize > 0 ? heights.mid(currentIndex, batchSize) : QList<double>();
         sentRequestInfo.terrainAtCoordinateQuery->signalTerrainData(true, requestAltitudes);
-        currentIndex += sentRequestInfo.cCoord;
+        currentIndex += batchSize;
+
     }
     _sentRequests.clear();
 
