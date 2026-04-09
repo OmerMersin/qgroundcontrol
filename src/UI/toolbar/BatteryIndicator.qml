@@ -203,9 +203,9 @@ Item {
                 }
 
                 if(!isNaN(voltage)){
-                    if (voltage > 25) {
+                    if (voltage > 30) {
                         cellVoltage = voltage / 12
-                    } else if (voltage < 25) {
+                    } else if (voltage < 26) {
                         cellVoltage = voltage / 6
                     } else {
                         return battery.chargeState.enumStringValue
