@@ -219,10 +219,31 @@ GPSBaseStationSupport *GPSProvider::_connectGPS()
         gpsDriver = new GPSDriverSBF(&_callbackEntry, this, &_sensorGps, &_satelliteInfo, kGPSHeadingOffset);
         baudrate = 0;
         break;
-    case GPSType::u_blox:
-        gpsDriver = new GPSDriverUBX(GPSDriverUBX::Interface::UART, &_callbackEntry, this, &_sensorGps, &_satelliteInfo);
+    case GPSType::u_blox: {
+        GPSDriverUBX::Settings settings{};
+        settings.dynamic_model = 7;
+        settings.dgnss_timeout = 0;
+        settings.min_cno = 0;
+        settings.min_elev = 0;
+        settings.output_rate = 0;
+        settings.heading_offset = 0.0f;
+        settings.uart2_baudrate = 0;
+        settings.ppk_output = false;
+        settings.jam_det_sensitivity_hi = false;
+        settings.mode = GPSDriverUBX::UBXMode::Normal;
+
+        gpsDriver = new GPSDriverUBX(
+            GPSDriverUBX::Interface::UART,
+            &_callbackEntry,
+            this,
+            &_sensorGps,
+            &_satelliteInfo,
+            settings
+            );
+
         baudrate = 0;
         break;
+    }
     case GPSType::femto:
         gpsDriver = new GPSDriverFemto(&_callbackEntry, this, &_sensorGps, &_satelliteInfo);
         baudrate = 0;
